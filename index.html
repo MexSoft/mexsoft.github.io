@@ -65,10 +65,41 @@
             这是一款专为追求极致效率的 macOS 用户打造的窗口布局管理工具。访问下载页面获取最新版本，
             或刷新页面以查看完整体验。
           </p>
-          <a href="https://github.com/MexSoft/mexsoft.github.io/releases/latest/download/Sensly.zip" rel="noreferrer">Download Now</a>
+          <a
+            id="download-btn"
+            href="https://github.com/MexSoft/mexsoft.github.io/releases/latest/download/Sensly.zip"
+            rel="noreferrer"
+          >
+            现在下载
+          </a>
         </div>
       </div>
     </div>
+    <script>
+      fetch("https://api.github.com/repos/MexSoft/mexsoft.github.io/releases/latest")
+        .then((response) => response.json())
+        .then((data) => {
+          const version = data.tag_name;
+          const asset = Array.isArray(data.assets) ? data.assets[0] : null;
+          const downloadUrl = asset?.browser_download_url;
+          const downloadButton = document.getElementById("download-btn");
+
+          if (!downloadButton) {
+            return;
+          }
+
+          if (version) {
+            downloadButton.textContent = `下载最新版本 (${version})`;
+          }
+
+          if (downloadUrl) {
+            downloadButton.href = downloadUrl;
+          }
+        })
+        .catch(() => {
+          // ignore fetch errors and keep fallback content
+        });
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
